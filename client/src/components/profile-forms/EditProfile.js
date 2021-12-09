@@ -59,7 +59,7 @@ const EditProfile = ({
       instagram: loading || !profile.social ? "" : profile.social.instagram,
       linkedin: loading || !profile.social ? "" : profile.social.linkedin,
     });
-  }, [loading]);
+  }, [loading, getCurrentProfile]);
 
   const onChange = (e) =>
     setFromData({ ...formData, [e.target.name]: e.target.value });
@@ -170,7 +170,7 @@ const EditProfile = ({
             <button
               onClick={() => toggleDisplaySocialInfo(!displaySocialInfo)}
               type="button"
-              className="btn btn-light"
+              className="btn btn-dark"
             >
               Add Social Network Links
             </button>

@@ -15,7 +15,7 @@ const Dashboard = ({
   profile: { profile, loading },
   deleteAccount,
 }) => {
-  useEffect(() => getCurrentProfile(), []);
+  useEffect(() => getCurrentProfile(), [getCurrentProfile]);
 
   return loading ? (
     <section className="container">

@@ -9,7 +9,6 @@ import {
   GET_PROFILES,
   GET_REPOS,
 } from "./type";
-import { Link, Navigate } from "react-router-dom";
 
 // Get user's profile
 export const getCurrentProfile = () => async (dispatch) => {
@@ -20,9 +19,13 @@ export const getCurrentProfile = () => async (dispatch) => {
       payload: res.data,
     });
   } catch (err) {
+    dispatch({ type: CLEAR_PROFILE });
     dispatch({
       type: PROFILE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status },
+      payload: {
+        msg: err.response ? err.response.statusText : "Something went wrong",
+        status: err.response ? err.response.status : "Something went wrong",
+      },
     });
   }
 };
@@ -39,7 +42,10 @@ export const getProfiles = () => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: PROFILE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status },
+      payload: {
+        msg: err.response ? err.response.statusText : "Something went wrong",
+        status: err.response ? err.response.status : "Something went wrong",
+      },
     });
   }
 };
@@ -57,7 +63,10 @@ export const getProfileById = (user_id) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: PROFILE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status },
+      payload: {
+        msg: err.response ? err.response.statusText : "Something went wrong",
+        status: err.response ? err.response.status : "Something went wrong",
+      },
     });
   }
 };
@@ -75,7 +84,10 @@ export const getGithubRepos = (username) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: PROFILE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status },
+      payload: {
+        msg: err.response ? err.response.statusText : "Something went wrong",
+        status: err.response ? err.response.status : "Something went wrong",
+      },
     });
   }
 };
@@ -284,11 +296,11 @@ export const deleteEducation = (edu_id) => async (dispatch) => {
 export const deleteAccount = () => async (dispatch) => {
   if (
     window.confirm(
-      "Are you sure you want to delete this account, this could not be undone"
+      "Are you sure want to delete this account, this could be undone"
     )
   ) {
     try {
-      const res = await axios.delete("http://localhost:5000/api/profile");
+      await axios.delete("http://localhost:5000/api/profile");
 
       dispatch({ type: CLEAR_PROFILE });
 

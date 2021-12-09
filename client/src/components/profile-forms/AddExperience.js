@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { addExperience } from "../../actions/profile";
 
-const AddExperience = ({ addExperience, alert: alert }) => {
+const AddExperience = ({ addExperience, alert }) => {
   // Change state whenever eperienece is updated successfully
   const [redirect, setRedirect] = useState(false);
 

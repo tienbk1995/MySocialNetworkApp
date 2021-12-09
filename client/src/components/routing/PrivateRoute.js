@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
@@ -13,10 +13,6 @@ const PrivateRoute = ({
   ) : (
     <Component />
   );
-};
-
-const render = (props, Component) => {
-  return <Component {...props} />;
 };
 
 PrivateRoute.propTypes = {
