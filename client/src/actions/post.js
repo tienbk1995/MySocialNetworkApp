@@ -14,7 +14,7 @@ import { setAlert } from "./alert";
 // Get posts from user
 export const getPosts = () => async (dispatch) => {
   try {
-    const res = await axios.get("http://localhost:5000/api/posts");
+    const res = await axios.get("/api/posts");
     dispatch({ type: GET_POSTS, payload: res.data });
   } catch (err) {
     dispatch({
@@ -30,9 +30,7 @@ export const getPosts = () => async (dispatch) => {
 // Add like for user
 export const addLike = (postId) => async (dispatch) => {
   try {
-    const res = await axios.put(
-      `http://localhost:5000/api/posts/like/${postId}`
-    );
+    const res = await axios.put(`/api/posts/like/${postId}`);
     dispatch({ type: UPDATE_LIKES, payload: { postId, likes: res.data } });
   } catch (err) {
     dispatch({
@@ -48,9 +46,7 @@ export const addLike = (postId) => async (dispatch) => {
 // Remove like for user
 export const removeLike = (postId) => async (dispatch) => {
   try {
-    const res = await axios.put(
-      `http://localhost:5000/api/posts/unlike/${postId}`
-    );
+    const res = await axios.put(`/api/posts/unlike/${postId}`);
     dispatch({ type: UPDATE_LIKES, payload: { postId, likes: res.data } });
   } catch (err) {
     dispatch({
@@ -66,7 +62,7 @@ export const removeLike = (postId) => async (dispatch) => {
 // Delete post by user owner
 export const deletePost = (postId) => async (dispatch) => {
   try {
-    const res = await axios.delete(`http://localhost:5000/api/posts/${postId}`);
+    const res = await axios.delete(`/api/posts/${postId}`);
     dispatch({ type: DELETE_POST, payload: postId });
     dispatch(setAlert("Post removed", "success", 5000));
   } catch (err) {
@@ -87,11 +83,7 @@ export const addPost = (formData) => async (dispatch) => {
       headers: { "Content-Type": "application/json" },
     };
 
-    const res = await axios.post(
-      `http://localhost:5000/api/posts`,
-      formData,
-      config
-    );
+    const res = await axios.post(`/api/posts`, formData, config);
 
     dispatch({ type: ADD_POST, payload: res.data });
 
@@ -110,7 +102,7 @@ export const addPost = (formData) => async (dispatch) => {
 // Get posts from user
 export const getPost = (postId) => async (dispatch) => {
   try {
-    const res = await axios.get(`http://localhost:5000/api/posts/${postId}`);
+    const res = await axios.get(`/api/posts/${postId}`);
     dispatch({ type: GET_POST, payload: res.data });
   } catch (err) {
     dispatch({
@@ -131,7 +123,7 @@ export const addComment = (postId, formData) => async (dispatch) => {
     };
 
     const res = await axios.post(
-      `http://localhost:5000/api/posts/comment/${postId}`,
+      `/api/posts/comment/${postId}`,
       formData,
       config
     );
@@ -153,9 +145,7 @@ export const addComment = (postId, formData) => async (dispatch) => {
 // Remove comment by user owner in the post
 export const removeComment = (postId, commentId) => async (dispatch) => {
   try {
-    const res = await axios.delete(
-      `http://localhost:5000/api/posts/comment/${postId}/${commentId}`
-    );
+    const res = await axios.delete(`/api/posts/comment/${postId}/${commentId}`);
 
     dispatch({ type: REMOVE_COMMENT, payload: commentId });
 
