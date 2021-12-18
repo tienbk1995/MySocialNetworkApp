@@ -24,7 +24,7 @@ const CommentItem = ({
         <p class="post-date">
           Posted on <Moment format="YYYY-MM-DD">{date}</Moment>
         </p>
-        {!auth.loading && auth.user._id == user && (
+        {!auth.loading && auth.user._id === user && (
           <button
             onClick={(e) => removeComment(postId, _id)}
             type="button"

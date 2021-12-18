@@ -22,3 +22,7 @@ export const DELETE_POST = "DELETE_POST";
 export const ADD_POST = "ADD_POST";
 export const ADD_COMMENT = "ADD_COMMENT";
 export const REMOVE_COMMENT = "REMOVE_COMMENT";
+export const EMAIL_SENT = "EMAIL_SENT";
+export const EMAIL_NOT_SENT = "EMAIL_NOT_SENT";
+export const PASSWORD_UPDATED = "PASSWORD_UPDATED";
+export const PASSWORD_FAILED = "PASSWORD_FAILED";

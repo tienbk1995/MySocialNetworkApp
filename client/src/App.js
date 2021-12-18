@@ -8,6 +8,8 @@ import "./App.css";
 // React Components
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
+import ResetPassword from "./components/auth/ResetPassword";
+import RenewPassword from "./components/auth/RenewPassword";
 import Dashboard from "./components/dashboard/Dashboard";
 import CreateProfile from "./components/profile-forms/CreateProfile";
 import EditProfile from "./components/profile-forms/EditProfile";
@@ -40,11 +42,19 @@ const App = () => {
           <Navbar />
           <Alert />
           <Routes>
+            {/* Public route */}
             <Route exact path="/" element={<Landing />} />
             <Route exact path="/register" element={<Register />} />
             <Route exact path="/login" element={<Login />} />
+            <Route exact path="/reset-password" element={<ResetPassword />} />
             <Route exact path="/profiles" element={<Profiles />} />
             <Route exact path="/profile/:id" element={<Profile />} />
+            <Route
+              exact
+              path="/renew-password/:token"
+              element={<RenewPassword />}
+            />
+            {/* Private route */}
             <Route
               exact
               path="/dashboard"

@@ -27,9 +27,9 @@ const Login = ({ login, isAuthenticated }) => {
   return (
     <Fragment>
       <section className="container">
-        <h1 className="large text-primary">Sign Up</h1>
+        <h1 className="large text-primary">Login</h1>
         <p className="lead">
-          <i className="fas fa-user"></i> Sign into Your Account
+          <i className="fas fa-user"></i> Log into Your Account
         </p>
         <form className="form" onSubmit={(e) => onSubmit(e)}>
           <div className="form-group">
@@ -42,8 +42,7 @@ const Login = ({ login, isAuthenticated }) => {
               required
             />
             <small className="form-text">
-              This site uses Gravatar so if you want a profile image, use a
-              Gravatar email
+              Enter your email account (eg: JohnSmith@gmail.com...)
             </small>
           </div>
           <div className="form-group">
@@ -55,11 +54,16 @@ const Login = ({ login, isAuthenticated }) => {
               value={password}
               onChange={(e) => onChange(e)}
             />
+            <small className="form-text">Enter your password</small>
           </div>
           <input type="submit" className="btn btn-primary" value="Login" />
         </form>
         <p className="my-1">
           Do not have an account? <Link to="/register">Sign In</Link>
+        </p>
+        <p className="my-1">
+          Have you forgot your password?{" "}
+          <Link to="/reset-password">Click here</Link>
         </p>
       </section>
     </Fragment>

@@ -7,6 +7,10 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   ACCOUNT_DELETED,
+  EMAIL_SENT,
+  EMAIL_NOT_SENT,
+  PASSWORD_UPDATED,
+  PASSWORD_FAILED,
 } from "../actions/type";
 
 const initialState = {
@@ -14,6 +18,8 @@ const initialState = {
   isAuthenticated: null,
   loading: true,
   user: null,
+  link: null,
+  password: null,
 };
 
 export default function (state = initialState, action) {
@@ -37,6 +43,34 @@ export default function (state = initialState, action) {
     case ACCOUNT_DELETED:
       localStorage.removeItem("token");
       return { ...state, token: null, isAuthenticated: false, loading: false };
+    case EMAIL_SENT:
+      return {
+        ...state,
+        token: null,
+        isAuthenticated: false,
+        loading: false,
+        link: payload,
+      };
+    case EMAIL_NOT_SENT:
+      return {
+        ...state,
+        token: null,
+        isAuthenticated: false,
+        loading: false,
+        link: null,
+      };
+    case PASSWORD_UPDATED:
+      return {
+        ...state,
+        loading: false,
+        password: payload,
+      };
+    case PASSWORD_FAILED:
+      return {
+        ...state,
+        loading: false,
+        password: null,
+      };
     default:
       return state;
   }
