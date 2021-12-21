@@ -13,6 +13,9 @@ export const DashboardAction = () => {
       <Link to="/add-education" class="btn btn-light">
         <i class="fas fa-graduation-cap text-primary"></i> Add Education
       </Link>
+      <Link to="/change-password" class="btn btn-light">
+        <i class="fas fa-key text-primary"></i> Change Password
+      </Link>
     </div>
   );
 };

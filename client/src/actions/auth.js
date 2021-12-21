@@ -11,6 +11,8 @@ import {
   EMAIL_NOT_SENT,
   PASSWORD_UPDATED,
   PASSWORD_FAILED,
+  PASSWORD_CHECKED,
+  PASSWORD_CHECKED_FAILED,
 } from "./type";
 import axios from "axios";
 import { setAlert } from "./alert";
@@ -166,3 +168,29 @@ export const renewPassword =
       dispatch({ type: PASSWORD_FAILED });
     }
   };
+
+// Check password
+export const checkPassword = (password) => async (dispatch) => {
+  const config = {
+    headers: { "Content-Type": "application/json" },
+  };
+
+  const body = JSON.stringify({ password });
+
+  try {
+    const res = await axios.post("/api/auth/checkpass", body, config);
+    // Check password successfully
+    dispatch({ type: PASSWORD_CHECKED, payload: res.data });
+  } catch (err) {
+    let errors = null;
+    if (err.response) {
+      if (err.response.data.error) errors = err.response.data.error;
+      else if (err.response.data.errors) errors = err.response.data.errors;
+    }
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, "danger", 3000)));
+    }
+
+    dispatch({ type: PASSWORD_CHECKED_FAILED });
+  }
+};

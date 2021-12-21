@@ -10,6 +10,7 @@ import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import ResetPassword from "./components/auth/ResetPassword";
 import RenewPassword from "./components/auth/RenewPassword";
+import ChangePassword from "./components/auth/ChangePassword";
 import Dashboard from "./components/dashboard/Dashboard";
 import CreateProfile from "./components/profile-forms/CreateProfile";
 import EditProfile from "./components/profile-forms/EditProfile";
@@ -89,6 +90,11 @@ const App = () => {
               exact
               path="/posts/:id"
               element={<PrivateRoute element={Post} />}
+            />
+            <Route
+              exact
+              path="/change-password"
+              element={<PrivateRoute element={ChangePassword} />}
             />
           </Routes>
         </Fragment>

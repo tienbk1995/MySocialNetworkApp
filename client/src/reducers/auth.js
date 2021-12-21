@@ -11,6 +11,8 @@ import {
   EMAIL_NOT_SENT,
   PASSWORD_UPDATED,
   PASSWORD_FAILED,
+  PASSWORD_CHECKED,
+  PASSWORD_CHECKED_FAILED,
 } from "../actions/type";
 
 const initialState = {
@@ -20,6 +22,7 @@ const initialState = {
   user: null,
   link: null,
   password: null,
+  isMatch: null,
 };
 
 export default function (state = initialState, action) {
@@ -70,6 +73,18 @@ export default function (state = initialState, action) {
         ...state,
         loading: false,
         password: null,
+      };
+    case PASSWORD_CHECKED:
+      return {
+        ...state,
+        loading: false,
+        isMatch: payload,
+      };
+    case PASSWORD_CHECKED_FAILED:
+      return {
+        ...state,
+        loading: false,
+        isMatch: false,
       };
     default:
       return state;

@@ -113,12 +113,13 @@ router.post(
       // Config payload
       const payload = {
         id: user._id,
+        password: user.password,
       };
       // Sign the token
       let token = jwt.sign(payload, config.get("jwtSecret"), {
         expiresIn: 360000,
       });
-      const renewLink = `https://pure-reaches-53373.herokuapp.com/renew-password/${token}`;
+      const publicLink = `https://pure-reaches-53373.herokuapp.com/renew-password/${token}`;
 
       const localLink = `http://localhost:3000/renew-password/${token}`;
 
@@ -137,7 +138,7 @@ router.post(
         from: "tienphanautoemail@gmail.com",
         to: email,
         subject: "Email to reset your password",
-        text: renewLink,
+        text: publicLink,
       };
 
       transporter.sendMail(mailOptions, function (error, info) {
@@ -146,7 +147,7 @@ router.post(
           return res.status(500).send("server error");
         } else {
           console.log("Email sent: " + info.response);
-          res.json(localLink);
+          res.json(publicLink);
         }
       });
     } catch (err) {

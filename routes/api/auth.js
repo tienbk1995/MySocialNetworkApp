@@ -12,8 +12,10 @@ const router = express.Router();
 // @access  Public
 router.get("/", auth, async (req, res) => {
   try {
-    let user = await User.findById(req.user.id).select("-password");
-    res.json(user);
+    let user = await User.findById(req.user.id);
+    // Check password decoded from token and current password in database
+    if (req.user.password === user.password) return res.json(user);
+    else throw new Error("Invalid Token");
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
@@ -21,7 +23,7 @@ router.get("/", auth, async (req, res) => {
 });
 
 // @route   POST api/auth
-// @desc    Create user's auth
+// @desc    Create user's auth for login process
 // @access  Public
 router.post(
   "/",
@@ -61,6 +63,7 @@ router.post(
       // Config payload
       const payload = {
         id: user._id,
+        password: user.password,
       };
 
       // Sign the token
@@ -73,6 +76,48 @@ router.post(
           res.json({ token });
         }
       );
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("server error");
+    }
+  }
+);
+
+// @route   POST api/auth/checkpass
+// @desc    Create user's auth for login process
+// @access  Public
+router.post(
+  "/checkpass",
+  auth,
+  [check("password", "Password is required").exists()],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: errors.array() });
+    }
+
+    const { password } = req.body;
+
+    try {
+      // Find user
+      let user = await User.findById(req.user.id);
+
+      // See if user not found
+      if (!user)
+        // Response 400 bad request
+        return res.status(400).json({ error: [{ msg: "User not found" }] });
+
+      // Validate password
+      const isMatch = await bcrypt.compare(password, user.password);
+
+      if (!isMatch) {
+        // Response 400 bad request
+        return res
+          .status(400)
+          .json({ error: [{ msg: "Current password is incorrect" }] });
+      }
+      // Password is match
+      res.json(isMatch);
     } catch (err) {
       console.error(err.message);
       res.status(500).send("server error");

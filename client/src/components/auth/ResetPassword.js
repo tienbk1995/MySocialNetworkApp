@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { resetPassword } from "../../actions/auth";
 import PropTypes from "prop-types";
@@ -40,6 +40,9 @@ const ResetPassword = ({ resetPassword }) => {
             </small>
           </div>
           <input type="submit" className="btn btn-primary" value="Submit" />
+          <Link class="btn btn-light my-1" to="/dashboard">
+            Go Back
+          </Link>
         </form>
       </section>
     </Fragment>
