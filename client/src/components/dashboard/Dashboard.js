@@ -2,7 +2,11 @@ import React, { Fragment, useEffect } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getCurrentProfile } from "../../actions/profile";
+import {
+  getCurrentProfile,
+  clearCurrentEducation,
+  clearCurrentExperience,
+} from "../../actions/profile";
 import Spinner from "../layout/Spinner";
 import { DashboardAction } from "./DashboardAction";
 import Experience from "./Experience";
@@ -14,8 +18,14 @@ const Dashboard = ({
   auth: { user },
   profile: { profile, loading },
   deleteAccount,
+  clearCurrentEducation,
+  clearCurrentExperience,
 }) => {
-  useEffect(() => getCurrentProfile(), [getCurrentProfile]);
+  useEffect(() => {
+    getCurrentProfile();
+    clearCurrentEducation();
+    clearCurrentExperience();
+  }, [getCurrentProfile, clearCurrentEducation, clearCurrentExperience]);
 
   return loading ? (
     <section className="container">
@@ -64,6 +74,8 @@ Dashboard.propTypes = {
   auth: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired,
   deleteAccount: PropTypes.func.isRequired,
+  clearCurrentEducation: PropTypes.func.isRequired,
+  clearCurrentExperience: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -71,6 +83,9 @@ const mapStateToProps = (state) => ({
   profile: state.profile,
 });
 
-export default connect(mapStateToProps, { getCurrentProfile, deleteAccount })(
-  Dashboard
-);
+export default connect(mapStateToProps, {
+  getCurrentProfile,
+  deleteAccount,
+  clearCurrentEducation,
+  clearCurrentExperience,
+})(Dashboard);

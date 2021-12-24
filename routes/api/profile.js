@@ -258,7 +258,8 @@ router.put(
     }
     const { school, degree, fieldofstudy, from, to, current, description } =
       req.body;
-    const newExp = {
+
+    const newEdu = {
       school,
       degree,
       fieldofstudy,
@@ -275,7 +276,7 @@ router.put(
         return res.status(400).send({ msg: "User not found" });
       }
 
-      profile.education.unshift(newExp);
+      profile.education.unshift(newEdu);
       await profile.save();
       res.json(profile);
     } catch (error) {
@@ -337,4 +338,152 @@ router.get("/github/:username", (req, res) => {
   }
 });
 
+// @route   PUT api/profile/education/:edu_id
+// @desc    Update profile education
+// @access  Private
+router.put(
+  "/education/:edu_id",
+  [
+    auth,
+    check("school", "School is required").not().isEmpty(),
+    check("degree", "Degree is required").not().isEmpty(),
+    check("fieldofstudy", "Field is required").not().isEmpty(),
+    check("from", "From date required").not().isEmpty(),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const { school, degree, fieldofstudy, from, to, current, description } =
+      req.body;
+
+    try {
+      const profile = await Profile.findOne({ user: req.user.id });
+
+      if (!profile) {
+        return res.status(400).send({ msg: "User not found" });
+      }
+      // Find the id request
+      const editIdx = profile.education
+        .map((item) => item.id)
+        .indexOf(req.params.edu_id);
+      // Edit the item according to the id
+      profile.education[editIdx] = {
+        school,
+        degree,
+        fieldofstudy,
+        from,
+        to,
+        current,
+        description,
+      };
+      // Update to database
+      await profile.save();
+      // Return response
+      res.json(profile);
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Server error");
+    }
+  }
+);
+
+// @route   GET api/profile/education/:edu_id
+// @desc    Get current user profile education
+// @access  Private
+router.get("/education/:edu_id", auth, async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+
+    if (!profile) {
+      return res.status(400).send({ msg: "User not found" });
+    }
+
+    // Find the id request
+    const eduIdx = profile.education
+      .map((item) => item.id)
+      .indexOf(req.params.edu_id);
+
+    res.json(profile.education[eduIdx]);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server error");
+  }
+});
+
+// @route   PUT api/profile/experience/:exp_id
+// @desc    Update profile experience
+// @access  Private
+router.put(
+  "/experience/:exp_id",
+  [
+    auth,
+    check("title", "Title is required").not().isEmpty(),
+    check("company", "Company is required").not().isEmpty(),
+    check("from", "From date is required").not().isEmpty(),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const { title, company, location, from, to, current, description } =
+      req.body;
+
+    try {
+      const profile = await Profile.findOne({ user: req.user.id });
+
+      if (!profile) {
+        return res.status(400).send({ msg: "User not found" });
+      }
+
+      // Find the id request
+      const editIdx = profile.experience
+        .map((item) => item.id)
+        .indexOf(req.params.exp_id);
+      // Update to current profile's experience
+      profile.experience[editIdx] = {
+        title,
+        company,
+        location,
+        from,
+        to,
+        current,
+        description,
+      };
+      // Store to database
+      await profile.save();
+      // Respond to client request
+      res.json(profile);
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Server error");
+    }
+  }
+);
+
+// @route   GET api/profile/experience/:exp_id
+// @desc    Get current user profile experience
+// @access  Private
+router.get("/experience/:exp_id", auth, async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+
+    if (!profile) {
+      return res.status(400).send({ msg: "User not found" });
+    }
+
+    // Find the id request
+    const expIdx = profile.experience
+      .map((item) => item.id)
+      .indexOf(req.params.exp_id);
+
+    // Respond to client request
+    res.json(profile.experience[expIdx]);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server error");
+  }
+});
 module.exports = router;

@@ -8,6 +8,10 @@ import {
   ACCOUNT_DELETED,
   GET_PROFILES,
   GET_REPOS,
+  GET_EDUCATION,
+  CLEAR_EDUCATION,
+  GET_EXPERIENCE,
+  CLEAR_EXPERIENCE,
 } from "./type";
 
 // Get user's profile
@@ -18,6 +22,79 @@ export const getCurrentProfile = () => async (dispatch) => {
       type: GET_PROFILE,
       payload: res.data,
     });
+  } catch (err) {
+    dispatch({ type: CLEAR_PROFILE });
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: {
+        msg: err.response ? err.response.statusText : "Something went wrong",
+        status: err.response ? err.response.status : "Something went wrong",
+      },
+    });
+  }
+};
+
+// Get user's profile education
+export const getCurrentEducation = (edu_id) => async (dispatch) => {
+  try {
+    dispatch({ type: CLEAR_EDUCATION });
+    const res = await axios.get(`/api/profile/education/${edu_id}`);
+    dispatch({
+      type: GET_EDUCATION,
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({ type: CLEAR_PROFILE });
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: {
+        msg: err.response ? err.response.statusText : "Something went wrong",
+        status: err.response ? err.response.status : "Something went wrong",
+      },
+    });
+  }
+};
+
+// Clear user's profile education
+export const clearCurrentEducation = () => async (dispatch) => {
+  try {
+    dispatch({ type: CLEAR_EDUCATION });
+  } catch (err) {
+    dispatch({ type: CLEAR_PROFILE });
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: {
+        msg: err.response ? err.response.statusText : "Something went wrong",
+        status: err.response ? err.response.status : "Something went wrong",
+      },
+    });
+  }
+};
+
+// Get user's profile experience
+export const getCurrentExperience = (exp_id) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/profile/experience/${exp_id}`);
+    dispatch({
+      type: GET_EXPERIENCE,
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({ type: CLEAR_PROFILE });
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: {
+        msg: err.response ? err.response.statusText : "Something went wrong",
+        status: err.response ? err.response.status : "Something went wrong",
+      },
+    });
+  }
+};
+
+// Clear user's profile experience
+export const clearCurrentExperience = () => async (dispatch) => {
+  try {
+    dispatch({ type: CLEAR_EXPERIENCE });
   } catch (err) {
     dispatch({ type: CLEAR_PROFILE });
     dispatch({
@@ -308,5 +385,85 @@ export const deleteAccount = () => async (dispatch) => {
         },
       });
     }
+  }
+};
+
+// Update Education by Id
+export const updateEducation = (formData, edu_id) => async (dispatch) => {
+  try {
+    const config = {
+      headers: { "Content-Type": "application/json" },
+    };
+
+    const res = await axios.put(
+      `/api/profile/education/${edu_id}`,
+      formData,
+      config
+    );
+
+    dispatch({
+      type: UPDATE_PROFILE,
+      payload: res.data,
+    });
+
+    dispatch(setAlert("Education updated successfully", "success", 5000));
+  } catch (err) {
+    // Set Alert for required fields
+    let errors = null;
+    if (err.response) {
+      if (err.response.data.error) errors = err.response.data.error;
+      else if (err.response.data.errors) errors = err.response.data.errors;
+    }
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, "danger", 3000)));
+    }
+    // Dispatch error
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: {
+        msg: err.response ? err.response.statusText : "Something went wrong",
+        status: err.response ? err.response.status : "Something went wrong",
+      },
+    });
+  }
+};
+
+// Update Experience by Id
+export const updateExperience = (formData, exp_id) => async (dispatch) => {
+  try {
+    const config = {
+      headers: { "Content-Type": "application/json" },
+    };
+
+    const res = await axios.put(
+      `/api/profile/experience/${exp_id}`,
+      formData,
+      config
+    );
+
+    dispatch({
+      type: UPDATE_PROFILE,
+      payload: res.data,
+    });
+
+    dispatch(setAlert("Experience updated successfully", "success", 5000));
+  } catch (err) {
+    // Set Alert for required fields
+    let errors = null;
+    if (err.response) {
+      if (err.response.data.error) errors = err.response.data.error;
+      else if (err.response.data.errors) errors = err.response.data.errors;
+    }
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, "danger", 3000)));
+    }
+    // Dispatch error
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: {
+        msg: err.response ? err.response.statusText : "Something went wrong",
+        status: err.response ? err.response.status : "Something went wrong",
+      },
+    });
   }
 };

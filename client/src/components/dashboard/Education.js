@@ -1,8 +1,9 @@
 import React, { Fragment } from "react";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Moment from "react-moment";
-import { deleteEducation } from "../../actions/profile";
+import { deleteEducation, updateEducation } from "../../actions/profile";
 
 const Education = ({ education, deleteEducation }) => {
   const educations = education.map((edu) => (
@@ -24,6 +25,11 @@ const Education = ({ education, deleteEducation }) => {
         >
           Delete
         </button>
+      </td>
+      <td>
+        <Link to={`/edit-education/${edu._id}`} class="btn btn-primary">
+          Edit
+        </Link>
       </td>
     </tr>
   ));

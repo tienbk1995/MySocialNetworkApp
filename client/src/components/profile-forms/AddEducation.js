@@ -47,7 +47,7 @@ const AddEducation = ({ addEducation, alert }) => {
   return (
     <Fragment>
       <section class="container">
-        <h1 class="large text-primary">Add An Education</h1>
+        <h1 class="large text-primary">An Education Form</h1>
         <p class="lead">
           <i class="fas fa-code-branch"></i> Add school or bootcamp that you
           have attended

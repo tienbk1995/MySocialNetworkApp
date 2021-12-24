@@ -1,17 +1,36 @@
 import React, { useState, Fragment, useEffect } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { useParams, Link, Navigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { addExperience } from "../../actions/profile";
+import { updateEducation, getCurrentEducation } from "../../actions/profile";
+import Spinner from "../layout/Spinner";
 
-const AddExperience = ({ addExperience, alert }) => {
+function formatDate(date) {
+  var d = new Date(date),
+    month = "" + (d.getMonth() + 1),
+    day = "" + d.getDate(),
+    year = d.getFullYear();
+
+  if (month.length < 2) month = "0" + month;
+  if (day.length < 2) day = "0" + day;
+
+  return [year, month, day].join("-");
+}
+
+const EditEducation = ({
+  profile: { educations, loading },
+  getCurrentEducation,
+  updateEducation,
+  alert,
+}) => {
+  const { id } = useParams();
   // Change state whenever eperienece is updated successfully
   const [redirect, setRedirect] = useState(false);
 
   const [formData, setFromData] = useState({
-    company: "",
-    title: "",
-    location: "",
+    school: "",
+    degree: "",
+    fieldofstudy: "",
     from: "",
     to: "",
     current: false,
@@ -20,64 +39,96 @@ const AddExperience = ({ addExperience, alert }) => {
 
   const [toDateDisabled, toggleDisabled] = useState(false);
 
+  const { school, degree, fieldofstudy, from, to, current, description } =
+    formData;
+
   useEffect(() => {
-    // Check if alert is fired before redirect to dashboard
-    if (alert[0]) {
-      if (alert[0].alertType === "success") {
-        console.log(alert[0]);
-        setRedirect(true);
+    // Stop fetching data when these're available
+    if (!educations) getCurrentEducation(id);
+    // Fill the form with data fetched from db
+    try {
+      setFromData({
+        school: loading || !educations.school ? "" : educations.school,
+        degree: loading || !educations.degree ? "" : educations.degree,
+        fieldofstudy:
+          loading || !educations.fieldofstudy ? "" : educations.fieldofstudy,
+        from: loading || !educations.from ? "" : formatDate(educations.from),
+        to: loading || !educations.to ? "" : formatDate(educations.to),
+        current: loading || !educations.current ? false : educations.current,
+        description:
+          loading || !educations.description ? "" : educations.description,
+      });
+
+      // Check if alert is fired before redirect to dashboard
+      if (alert[0]) {
+        if (alert[0].alertType === "success") {
+          console.log(alert[0]);
+          setRedirect(true);
+        }
       }
+    } catch (err) {
+      return (
+        <section class="container">
+          <Spinner />
+        </section>
+      );
     }
-  }, [alert]);
+  }, [educations]);
+
   // Redirect to dashboard
   if (redirect) return <Navigate to="/dashboard" />;
 
-  const { company, title, location, from, to, current, description } = formData;
+  if (!educations)
+    return (
+      <section class="container">
+        <Spinner />
+      </section>
+    );
 
   const onChange = (e) =>
     setFromData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = (e) => {
     e.preventDefault();
-    addExperience(formData);
+    updateEducation(formData, id);
   };
 
   return (
     <Fragment>
       <section class="container">
-        <h1 class="large text-primary">An Experience Form</h1>
+        <h1 class="large text-primary">Edit Education Form</h1>
         <p class="lead">
-          <i class="fas fa-code-branch"></i> Add any developer/programming
-          positions that you have had in the past
+          <i class="fas fa-code-branch"></i> Edit/Add school or bootcamp that
+          you have attended
         </p>
         <small>* = required field</small>
         <form class="form" onSubmit={(e) => onSubmit(e)}>
           <div class="form-group">
             <input
               type="text"
-              placeholder="* Job Title"
-              name="title"
+              placeholder="* School or bootcamp"
+              name="school"
               required
-              value={title}
+              value={school}
               onChange={(e) => onChange(e)}
             />
           </div>
           <div class="form-group">
             <input
               type="text"
-              placeholder="* Company"
-              name="company"
+              placeholder="* Degree or certificate"
+              name="degree"
               required
-              value={company}
+              value={degree}
               onChange={(e) => onChange(e)}
             />
           </div>
           <div class="form-group">
             <input
               type="text"
-              placeholder="Location"
-              name="location"
-              value={location}
+              placeholder="Field of study"
+              name="fieldofstudy"
+              value={fieldofstudy}
               onChange={(e) => onChange(e)}
             />
           </div>
@@ -102,7 +153,7 @@ const AddExperience = ({ addExperience, alert }) => {
                   toggleDisabled(!toDateDisabled);
                 }}
               />{" "}
-              Current Job
+              Current Study
             </p>
           </div>
           <div class="form-group">
@@ -120,7 +171,7 @@ const AddExperience = ({ addExperience, alert }) => {
               name="description"
               cols="30"
               rows="5"
-              placeholder="Job Description"
+              placeholder="Major Description"
               value={description}
               onChange={(e) => onChange(e)}
             ></textarea>
@@ -135,15 +186,18 @@ const AddExperience = ({ addExperience, alert }) => {
   );
 };
 
-// Add required properties for component
-AddExperience.propTypes = {
-  addExperience: PropTypes.func.isRequired,
+EditEducation.propTypes = {
+  updateEducation: PropTypes.func.isRequired,
+  getCurrentEducation: PropTypes.func.isRequired,
+  profile: PropTypes.object.isRequired,
 };
 
-// Map state of component to state of redux-reducer
 const mapStateToProps = (state) => ({
   alert: state.alert,
+  profile: state.profile,
 });
 
-// Connect properties and state b/w redux-react
-export default connect(mapStateToProps, { addExperience })(AddExperience);
+export default connect(mapStateToProps, {
+  updateEducation,
+  getCurrentEducation,
+})(EditEducation);

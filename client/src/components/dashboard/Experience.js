@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Moment from "react-moment";
@@ -24,6 +25,11 @@ const Experience = ({ experience, deleteExperience }) => {
         >
           Delete
         </button>
+      </td>
+      <td>
+        <Link to={`/edit-experience/${exp._id}`} class="btn btn-primary">
+          Edit
+        </Link>
       </td>
     </tr>
   ));

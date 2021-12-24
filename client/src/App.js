@@ -15,7 +15,9 @@ import Dashboard from "./components/dashboard/Dashboard";
 import CreateProfile from "./components/profile-forms/CreateProfile";
 import EditProfile from "./components/profile-forms/EditProfile";
 import AddExperience from "./components/profile-forms/AddExperience";
+import EditExperience from "./components/profile-forms/EditExperience";
 import AddEducation from "./components/profile-forms/AddEducation";
+import EditEducation from "./components/profile-forms/EditEducation";
 import Profiles from "./components/profile/Profiles";
 import Profile from "./components/user-profile/Profile";
 import Posts from "./components/posts/Posts";
@@ -78,8 +80,18 @@ const App = () => {
             />
             <Route
               exact
+              path="/edit-experience/:id"
+              element={<PrivateRoute element={EditExperience} />}
+            />
+            <Route
+              exact
               path="/add-education"
               element={<PrivateRoute element={AddEducation} />}
+            />
+            <Route
+              exact
+              path="/edit-education/:id"
+              element={<PrivateRoute element={EditEducation} />}
             />
             <Route
               exact
