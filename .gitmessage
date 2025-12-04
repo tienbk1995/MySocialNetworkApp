@@ -1,0 +1,22 @@
+# <type>(<scope>): <subject>
+#
+# <body>
+#
+# <footer>
+#
+# --- COMMIT MESSAGE TEMPLATE ---
+# Type: feat, fix, docs, style, refactor, perf, test, chore
+# Scope: Optional - component/feature affected
+# Subject: Imperative, lowercase, max 50 characters
+# 
+# Body: Explain what and why (not how)
+# - Wrap at 72 characters
+# - Separate from subject with blank line
+# 
+# Footer: Issue references (fixes #123, relates to #456)
+# 
+# Examples:
+# feat(auth): add password reset functionality
+# fix(profile): correct user avatar display issue
+# docs(readme): update installation instructions
+# refactor(posts): simplify post filtering logic
