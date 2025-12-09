@@ -15,8 +15,6 @@ This project demonstrates end-to-end web development skills: API design, real-ti
 - Responsive UI (mobile + desktop)
 - Basic admin panel for content moderation (optional)
 
-> Replace or remove features above to match what your repo actually implements.
-
 ---
 
 ## 🧰 Tech Stack
